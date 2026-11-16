@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+/* Lenis: su CSS no se exporta como ruta, se copia aquí. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Bloques de color planos (variante): cada sección es un color liso sacado de las láminas.
+   `void` es el azul de fondo por defecto; `hueso` el papel; `rojo` sigue siendo el acento (coral). */
+@theme {
+  --font-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-cifra: "Bodoni Moda", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --color-void: oklch(27% 0.06 225);
+  --color-superficie: oklch(31% 0.065 225);
+  --color-elevado: oklch(36% 0.06 225);
+  --color-borde: oklch(48% 0.05 225);
+  --color-rojo: oklch(66% 0.17 38);
+  --color-rojo-profundo: oklch(56% 0.17 35);
+  --color-ocre: oklch(76% 0.13 78);
+  --color-hueso: oklch(95% 0.018 88);
+  --color-tinta: oklch(17% 0.02 250);
+  --color-texto: oklch(96% 0.012 88);
+  --color-texto-2: oklch(84% 0.02 200);
+  --color-texto-3: oklch(70% 0.03 210);
+
+  --text-hero: clamp(3rem, 8.4vw, 9rem);
+  --text-hero--line-height: 0.9;
+  --text-hero--letter-spacing: -0.02em;
+
+  --text-display: clamp(2.125rem, 4.6vw, 4.25rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.015em;
+
+  --text-lead: clamp(1.125rem, 1.6vw, 1.5rem);
+  --text-lead--line-height: 1.45;
+
+  --text-body: clamp(1rem, 1.05vw, 1.0625rem);
+  --text-body--line-height: 1.65;
+
+  --text-etiqueta: 0.75rem;
+  --text-etiqueta--line-height: 1.3;
+  --text-etiqueta--letter-spacing: 0.12em;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--color-void);
+  }
+  body {
+    margin: 0;
+    background: var(--color-void);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-ocre);
+    color: var(--color-tinta);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ocre);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+}
+
+@layer utilities {
+  .h-pantalla {
+    height: 100svh;
+  }
+
+  /* Esquinas de visor del HUD. */
+  .esquinas {
+    --l: 14px;
+    background:
+      linear-gradient(currentColor, currentColor) top left / var(--l) 1px,
+      linear-gradient(currentColor, currentColor) top left / 1px var(--l),
+      linear-gradient(currentColor, currentColor) top right / var(--l) 1px,
+      linear-gradient(currentColor, currentColor) top right / 1px var(--l),
+      linear-gradient(currentColor, currentColor) bottom left / var(--l) 1px,
+      linear-gradient(currentColor, currentColor) bottom left / 1px var(--l),
+      linear-gradient(currentColor, currentColor) bottom right / var(--l) 1px,
+      linear-gradient(currentColor, currentColor) bottom right / 1px var(--l);
+    background-repeat: no-repeat;
+  }
+
+  /* Entradas: 600 ms con escalonado de 90 ms (--i). */
+  [data-aparece] {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    transition:
+      opacity 0.6s cubic-bezier(0.2, 0.7, 0.1, 1),
+      transform 0.6s cubic-bezier(0.2, 0.7, 0.1, 1);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  [data-aparece].dentro {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-aparece] {
+      transform: none;
+      transition-duration: 0.01ms;
+    }
+  }
+}
+
+@keyframes entra-paso {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+dialog::backdrop {
+  background: oklch(10% 0.02 250 / 0.7);
+}
+
+/* Barra de la lista de la Pokédex: fina y del color del texto. */
+.lista-fina {
+  scrollbar-width: thin;
+  scrollbar-color: currentColor transparent;
+}
+
+@keyframes entra-lamina {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[entra-lamina_0\.4s_ease-out\] {
+    animation: none;
+  }
+}
